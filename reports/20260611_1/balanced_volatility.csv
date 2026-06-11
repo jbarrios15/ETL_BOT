@@ -1,0 +1,6 @@
+volatility_bucket,trades,wins,losses,winrate,profit,roi,profit_factor
+Muy Baja,174,79,95,45.4,-19.36,-11.13,0.78
+Baja,171,68,103,39.77,-43.6,-25.5,0.57
+Media,173,98,75,56.65,10.25,5.92,1.14
+Alta,173,88,85,50.87,-9.32,-5.39,0.89
+Muy Alta,171,94,77,54.97,3.64,2.13,1.05

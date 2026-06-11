@@ -1,0 +1,6 @@
+setup_symbol,trades,wins,losses,winrate,profit,roi,profit_factor
+,0,0,0,0.0,0.0,0.0,0.0
+balanced_rebound | EURUSD-OTC,282,150,132,53.19,-3.26,-1.16,0.98
+balanced_rebound | GBPUSD-OTC,580,277,303,47.76,-55.13,-9.51,0.81
+extreme_reversion | EURUSD-OTC,763,375,388,49.15,-55.73,-7.3,0.85
+extreme_reversion | GBPUSD-OTC,864,420,444,48.61,-74.16,-8.58,0.83

@@ -17,34 +17,347 @@ from utils.report_manager import (
     get_report_folder
 )
 
+from analysis_helpers import (
+    calculate_profit_factor,
+    build_metrics,
+    print_metrics,
+    analyze_group
+)
 
-def calculate_profit_factor(df):
+def balanced_ema_analysis(
+    df,
+    report_folder
+):
 
-    gross_profit = (
+    df = (
         df
         .filter(
-            pl.col("profit") > 0
+            pl.col("setup_type")
+            == "balanced_rebound"
         )
-        ["profit"]
-        .sum()
+        .with_columns(
+
+            pl.when(
+                pl.col("ema_distance") < 0.10
+            )
+            .then(pl.lit("0.00-0.10"))
+
+            .when(
+                pl.col("ema_distance") < 0.20
+            )
+            .then(pl.lit("0.10-0.20"))
+
+            .when(
+                pl.col("ema_distance") < 0.30
+            )
+            .then(pl.lit("0.20-0.30"))
+
+            .otherwise(
+                pl.lit("0.30+")
+            )
+
+            .alias("ema_bucket")
+        )
     )
 
-    gross_loss = abs(
+    analyze_group(
+        df,
+        "ema_bucket",
+        report_folder,
+        "balanced_ema.csv",
+        "BALANCED REBOUND - EMA DISTANCE"
+    )
+
+def balanced_rsi_analysis(
+    df,
+    report_folder
+):
+
+    df = (
         df
         .filter(
-            pl.col("profit") < 0
+            pl.col("setup_type")
+            == "balanced_rebound"
         )
-        ["profit"]
-        .sum()
+        .with_columns(
+
+            pl.when(
+                pl.col("rsi") < 40
+            )
+            .then(pl.lit("RSI < 40"))
+
+            .when(
+                pl.col("rsi") < 60
+            )
+            .then(pl.lit("RSI 40-60"))
+
+            .when(
+                pl.col("rsi") < 75
+            )
+            .then(pl.lit("RSI 60-75"))
+
+            .otherwise(
+                pl.lit("RSI > 75")
+            )
+
+            .alias("rsi_bucket")
+        )
     )
 
-    if gross_loss == 0:
-        return 0
+    analyze_group(
+        df,
+        "rsi_bucket",
+        report_folder,
+        "balanced_rsi.csv",
+        "BALANCED REBOUND - RSI"
+    )
 
-    return round(
-        gross_profit /
-        gross_loss,
-        2
+def balanced_hour_analysis(
+    df,
+    report_folder
+):
+
+    df = df.filter(
+        pl.col("setup_type")
+        == "balanced_rebound"
+    )
+
+    analyze_group(
+        df,
+        "trade_hour",
+        report_folder,
+        "balanced_hour.csv",
+        "BALANCED REBOUND - HOUR"
+    )
+
+def balanced_symbol_analysis(
+    df,
+    report_folder
+):
+
+    df = df.filter(
+        pl.col("setup_type")
+        == "balanced_rebound"
+    )
+
+    analyze_group(
+        df,
+        "symbol",
+        report_folder,
+        "balanced_symbol.csv",
+        "BALANCED REBOUND - SYMBOL"
+    )
+
+def balanced_weekday_analysis(
+    df,
+    report_folder
+):
+
+    df = df.filter(
+        pl.col("setup_type")
+        == "balanced_rebound"
+    )
+
+    analyze_group(
+        df,
+        "trade_weekday",
+        report_folder,
+        "balanced_weekday.csv",
+        "BALANCED REBOUND - WEEKDAY"
+    )
+
+def balanced_score_analysis(
+    df,
+    report_folder
+):
+
+    df = (
+        df
+        .filter(
+            pl.col("setup_type")
+            == "balanced_rebound"
+        )
+        .with_columns(
+
+            pl.max_horizontal(
+                "call_score",
+                "put_score"
+            )
+            .alias(
+                "max_score"
+            )
+        )
+
+        .with_columns(
+
+            pl.when(
+                pl.col("max_score") < 50
+            )
+            .then(pl.lit("0-50"))
+
+            .when(
+                pl.col("max_score") < 60
+            )
+            .then(pl.lit("50-60"))
+
+            .when(
+                pl.col("max_score") < 70
+            )
+            .then(pl.lit("60-70"))
+
+            .when(
+                pl.col("max_score") < 80
+            )
+            .then(pl.lit("70-80"))
+
+            .otherwise(
+                pl.lit("80+")
+            )
+
+            .alias(
+                "score_bucket"
+            )
+        )
+    )
+
+    analyze_group(
+        df,
+        "score_bucket",
+        report_folder,
+        "balanced_score.csv",
+        "BALANCED REBOUND - SCORE"
+    )
+
+def strategy_comparison_analysis(
+    df,
+    report_folder
+):
+
+    df = (
+        df
+        .filter(
+            pl.col("strategy_version")
+            .is_not_null()
+        )
+    )
+
+    analyze_group(
+        df,
+        "strategy_version",
+        report_folder,
+        "strategy_comparison.csv",
+        "STRATEGY COMPARISON"
+    )
+
+def balanced_duration_analysis(
+    df,
+    report_folder
+):
+
+    df = (
+        df
+        .filter(
+            pl.col("setup_type")
+            == "balanced_rebound"
+        )
+        .with_columns(
+
+            pl.when(
+                pl.col("duration_seconds") < 60
+            )
+            .then(
+                pl.lit("0-60")
+            )
+
+            .when(
+                pl.col("duration_seconds") < 70
+            )
+            .then(
+                pl.lit("60-70")
+            )
+
+            .when(
+                pl.col("duration_seconds") < 80
+            )
+            .then(
+                pl.lit("70-80")
+            )
+
+            .otherwise(
+                pl.lit("80+")
+            )
+
+            .alias(
+                "duration_bucket"
+            )
+        )
+    )
+
+    analyze_group(
+        df,
+        "duration_bucket",
+        report_folder,
+        "balanced_duration.csv",
+        "BALANCED REBOUND - DURATION"
+    )
+
+def setup_symbol_analysis(
+    df,
+    report_folder
+):
+
+    df = (
+        df
+        .with_columns(
+
+            (
+                pl.col("setup_type")
+                + " | "
+                + pl.col("symbol")
+            )
+
+            .alias(
+                "setup_symbol"
+            )
+        )
+    )
+
+    analyze_group(
+        df,
+        "setup_symbol",
+        report_folder,
+        "setup_symbol.csv",
+        "SETUP + SYMBOL"
+    )
+
+def setup_hour_analysis(
+    df,
+    report_folder
+):
+
+    df = (
+        df
+        .with_columns(
+
+            (
+                pl.col("setup_type")
+                + " | H"
+                + pl.col("trade_hour")
+                .cast(pl.Utf8)
+            )
+
+            .alias(
+                "setup_hour"
+            )
+        )
+    )
+
+    analyze_group(
+        df,
+        "setup_hour",
+        report_folder,
+        "setup_hour.csv",
+        "SETUP + HOUR"
     )
 
 
@@ -417,6 +730,56 @@ def main():
     )
 
     balanced_volatility_analysis(
+        df,
+        report_folder
+    )
+
+    balanced_ema_analysis(
+    df,
+    report_folder
+    )
+
+    balanced_rsi_analysis(
+        df,
+        report_folder
+    )
+
+    balanced_hour_analysis(
+        df,
+        report_folder
+    )
+
+    balanced_symbol_analysis(
+        df,
+        report_folder
+    )
+
+    balanced_weekday_analysis(
+        df,
+        report_folder
+    )
+
+    balanced_score_analysis(
+        df,
+        report_folder
+    )
+
+    strategy_comparison_analysis(
+        df,
+        report_folder
+    )
+
+    balanced_duration_analysis(
+        df,
+        report_folder
+    )
+
+    setup_symbol_analysis(
+        df,
+        report_folder
+    )
+
+    setup_hour_analysis(
         df,
         report_folder
     )

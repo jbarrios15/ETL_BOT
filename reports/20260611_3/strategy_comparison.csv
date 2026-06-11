@@ -1,0 +1,4 @@
+strategy_version,trades,wins,losses,winrate,profit,roi,profit_factor
+v2,12,6,6,50.0,-0.84,-7.0,0.86
+v3_cooldown,1520,746,774,49.08,-115.88,-7.62,0.85
+v4_ema20,981,482,499,49.13,-73.24,-7.47,0.85
