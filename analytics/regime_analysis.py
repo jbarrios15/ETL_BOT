@@ -17,12 +17,28 @@ from utils.report_manager import (
     get_report_folder
 )
 
+from adhoc_analysis import (
+    balanced_hour17_deep_analysis
+)
+
+
 from analysis_helpers import (
     calculate_profit_factor,
     build_metrics,
     print_metrics,
     analyze_group
 )
+
+from phase2_analysis import (
+    daily_setup_hour_analysis
+)
+
+#DICE QUE ANALISIS VAN A CORRER
+
+RUN_PHASE1 = True
+RUN_PHASE2 = False 
+RUN_ADHOC = True
+
 
 def balanced_ema_analysis(
     df,
@@ -711,6 +727,7 @@ def balanced_volatility_analysis(
 
 def main():
 
+    
     report_folder = (
         get_report_folder()
     )
@@ -724,65 +741,79 @@ def main():
         "data/silver/trades.parquet"
     )
 
-    setup_comparison(
+    if RUN_PHASE1:
+         
+        setup_comparison(
+            df,
+            report_folder
+        )
+
+        balanced_volatility_analysis(
+            df,
+            report_folder
+        )
+
+        balanced_ema_analysis(
         df,
         report_folder
-    )
+        )
 
-    balanced_volatility_analysis(
-        df,
-        report_folder
-    )
+        balanced_rsi_analysis(
+            df,
+            report_folder
+        )
 
-    balanced_ema_analysis(
-    df,
-    report_folder
-    )
+        balanced_hour_analysis(
+            df,
+            report_folder
+        )
 
-    balanced_rsi_analysis(
-        df,
-        report_folder
-    )
+        balanced_symbol_analysis(
+            df,
+            report_folder
+        )
 
-    balanced_hour_analysis(
-        df,
-        report_folder
-    )
+        balanced_weekday_analysis(
+            df,
+            report_folder
+        )
 
-    balanced_symbol_analysis(
-        df,
-        report_folder
-    )
+        balanced_score_analysis(
+            df,
+            report_folder
+        )
 
-    balanced_weekday_analysis(
-        df,
-        report_folder
-    )
+        strategy_comparison_analysis(
+            df,
+            report_folder
+        )
 
-    balanced_score_analysis(
-        df,
-        report_folder
-    )
+        balanced_duration_analysis(
+            df,
+            report_folder
+        )
 
-    strategy_comparison_analysis(
-        df,
-        report_folder
-    )
+        setup_symbol_analysis(
+            df,
+            report_folder
+        )
 
-    balanced_duration_analysis(
-        df,
-        report_folder
-    )
+        setup_hour_analysis(
+            df,
+            report_folder
+        )
 
-    setup_symbol_analysis(
-        df,
-        report_folder
-    )
+        daily_setup_hour_analysis(
+            df,
+            report_folder
+        )
 
-    setup_hour_analysis(
-        df,
-        report_folder
-    )
+    if RUN_ADHOC:
+
+        balanced_hour17_deep_analysis(
+            df,
+            report_folder
+        )
 
     print()
     print(
