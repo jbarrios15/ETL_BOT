@@ -1,121 +1,331 @@
 import polars as pl
-from datetime import date
 
-def balanced_hour17_deep_analysis(
+from analysis_helpers import (
+    build_metrics
+)
+
+
+def window_analysis(
     df,
     report_folder
 ):
 
     print()
     print("=" * 60)
-    print(
-        "BALANCED REBOUND HOUR 17 DEEP ANALYSIS"
-    )
+    print("WINDOW ANALYSIS")
     print("=" * 60)
 
-    target_dates = [
+    windows = [
 
-        date(2026, 6, 6),
-        date(2026, 6, 7),
-        date(2026, 6, 10),
-        date(2026, 6, 11),
-        date(2026, 6, 12)
+        # =====================================================
+        # BALANCED REBOUND
+        # =====================================================
+
+        {
+            "setup": "balanced_rebound",
+            "window": "BR_16_17",
+            "description": "16:00-17:00",
+            "hours": [16, 17]
+        },
+
+        {
+            "setup": "balanced_rebound",
+            "window": "BR_16_18",
+            "description": "16:00-18:00",
+            "hours": [16, 17, 18]
+        },
+
+        {
+            "setup": "balanced_rebound",
+            "window": "BR_22_23",
+            "description": "22:00-23:00",
+            "hours": [22, 23]
+        },
+
+        {
+            "setup": "balanced_rebound",
+            "window": "BR_NEG_02_03",
+            "description": "02:00-03:00",
+            "hours": [2, 3]
+        },
+
+        {
+            "setup": "balanced_rebound",
+            "window": "BR_NEG_20_21",
+            "description": "20:00-21:00",
+            "hours": [20, 21]
+        },
+
+        # =====================================================
+        # EXTREME REVERSION
+        # =====================================================
+
+        {
+            "setup": "extreme_reversion",
+            "window": "ER_07_08",
+            "description": "07:00-08:00",
+            "hours": [7, 8]
+        },
+
+        {
+            "setup": "extreme_reversion",
+            "window": "ER_17_18",
+            "description": "17:00-18:00",
+            "hours": [17, 18]
+        },
+
+        {
+            "setup": "extreme_reversion",
+            "window": "ER_21_23",
+            "description": "21:00-23:00",
+            "hours": [21, 22, 23]
+        },
+
+        {
+            "setup": "extreme_reversion",
+            "window": "ER_NEG_09",
+            "description": "09:00",
+            "hours": [9]
+        },
+
+        {
+            "setup": "extreme_reversion",
+            "window": "ER_NEG_14",
+            "description": "14:00",
+            "hours": [14]
+        },
+
+        {
+            "setup": "extreme_reversion",
+            "window": "ER_NEG_20",
+            "description": "20:00",
+            "hours": [20]
+        }
 
     ]
 
-    analysis_df = (
+    results = []
+
+    versions = (
 
         df
 
-        .filter(
-
-            (pl.col("setup_type") == "balanced_rebound")
-
-            &
-
-            (pl.col("trade_hour") == 17)
-
-            &
-
-            (
-                pl.col("trade_date")
-                .is_in(target_dates)
-            )
-
-        )
-
-        .with_columns(
-
-            pl.max_horizontal(
-                "call_score",
-                "put_score"
-            )
-            .alias(
-                "max_score"
-            )
-
-        )
-
         .select(
+            "strategy_version"
+        )
 
-            [
-                "trade_date",
+        .drop_nulls()
 
-                "symbol",
+        .unique()
 
-                "direction",
+        .to_series()
 
-                "strategy_version",
+        .to_list()
 
-                "result",
+    )
 
-                "profit",
+    print()
+    print("VERSIONES DETECTADAS:")
+    print(versions)
 
-                "is_win",
+    for w in windows:
 
-                "rsi",
+        for version in versions:
 
-                "volatility_pct",
+            subset = (
 
-                "ema_distance",
+                df.filter(
 
-                "call_score",
+                    (pl.col("setup_type") == w["setup"])
 
-                "put_score",
+                    &
 
-                "max_score"
-            ]
+                    (
+                        pl.col("trade_hour")
+                        .is_in(w["hours"])
+                    )
+
+                    &
+
+                    (
+                        pl.col("strategy_version")
+                        == version
+                    )
+
+                )
+
+            )
+
+            if len(subset) == 0:
+                continue
+
+            metrics = build_metrics(
+                subset
+            )
+
+            row = {
+
+                "setup": w["setup"],
+
+                "strategy_version": version,
+
+                "window": w["window"],
+
+                "hours": w["description"],
+
+                **metrics
+
+            }
+
+            results.append(
+                row
+            )
+
+    result_df = (
+
+        pl.DataFrame(
+            results
+        )
+
+        .sort(
+            by=[
+                "profit_factor",
+                "profit"
+            ],
+            descending=True
+        )
+
+    )
+
+    # ==========================================================
+    # RESUMEN POR VERSION
+    # ==========================================================
+
+    version_summary = (
+
+        result_df
+
+        .group_by(
+            "strategy_version"
+        )
+
+        .agg(
+
+            pl.sum("trades")
+            .alias("trades"),
+
+            pl.mean("winrate")
+            .alias("avg_winrate"),
+
+            pl.sum("profit")
+            .alias("profit"),
+
+            pl.mean("profit_factor")
+            .alias("avg_pf")
 
         )
 
         .sort(
-            [
-                "trade_date"
-            ]
+            "avg_pf",
+            descending=True
         )
 
     )
 
-    analysis_df.write_csv(
+    version_summary.write_csv(
 
         report_folder /
 
-        "balanced17_raw.csv"
+        "window_analysis_by_version.csv"
 
     )
 
-    print(analysis_df)
+    # ==========================================================
+    # CSV PRINCIPAL
+    # ==========================================================
 
-    print(
-        f"Trades encontrados: "
-        f"{len(analysis_df)}"
-    )
+    result_df.write_csv(
 
-    print(
-        "Archivo generado:"
-    )
-
-    print(
         report_folder /
-        "balanced17_raw.csv"
+
+        "window_analysis.csv"
+
+    )
+
+    # ==========================================================
+    # TOP 10
+    # ==========================================================
+
+    top10 = (
+
+        result_df
+
+        .sort(
+            by=[
+                "profit_factor",
+                "profit"
+            ],
+            descending=True
+        )
+
+        .head(10)
+
+    )
+
+    top10.write_csv(
+
+        report_folder /
+
+        "top10_windows.csv"
+
+    )
+
+    # ==========================================================
+    # WORST 10
+    # ==========================================================
+
+    worst10 = (
+
+        result_df
+
+        .sort(
+            by=[
+                "profit_factor",
+                "profit"
+            ],
+            descending=False
+        )
+
+        .head(10)
+
+    )
+
+    worst10.write_csv(
+
+        report_folder /
+
+        "worst10_windows.csv"
+
+    )
+
+    print()
+    print("WINDOW ANALYSIS")
+    print(result_df)
+
+    print()
+    print("WINDOW ANALYSIS BY VERSION")
+    print(version_summary)
+
+    print()
+    print("TOP 10 WINDOWS")
+    print(top10)
+
+    print()
+    print("WORST 10 WINDOWS")
+    print(worst10)
+
+    print()
+    print(
+        f"Archivo generado: "
+        f"{report_folder / 'window_analysis.csv'}"
     )

@@ -1,0 +1,12 @@
+setup,window,hours,trades,wins,losses,winrate,profit,roi,profit_factor
+balanced_rebound,BR_16_17,16:00-17:00,103,65,38,63.11,19.02,18.47,1.53
+balanced_rebound,BR_22_23,22:00-23:00,64,38,26,59.38,6.41,10.02,1.25
+balanced_rebound,BR_16_18,16:00-18:00,147,85,62,57.82,12.27,8.35,1.2
+extreme_reversion,ER_07_08,07:00-08:00,180,101,79,56.11,11.09,6.16,1.15
+extreme_reversion,ER_21_23,21:00-23:00,139,75,64,53.96,3.51,2.53,1.06
+extreme_reversion,ER_17_18,17:00-18:00,163,87,76,53.37,2.88,1.77,1.04
+extreme_reversion,ER_NEG_20,20:00,99,40,59,40.4,-22.52,-22.75,0.6
+extreme_reversion,ER_NEG_09,09:00,187,75,112,40.11,-45.7,-24.44,0.58
+balanced_rebound,BR_NEG_02_03,02:00-03:00,117,46,71,39.32,-30.61,-26.16,0.56
+balanced_rebound,BR_NEG_20_21,20:00-21:00,87,34,53,39.08,-23.89,-27.46,0.55
+extreme_reversion,ER_NEG_14,14:00,74,26,48,35.14,-23.69,-32.01,0.49

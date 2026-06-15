@@ -1,0 +1,3 @@
+score_bucket,trades,wins,losses,winrate,profit,roi,profit_factor
+70-80,523,254,269,48.57,-47.69,-9.12,0.82
+80+,601,296,305,49.25,-42.74,-7.11,0.86

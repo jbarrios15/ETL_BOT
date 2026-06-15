@@ -13,12 +13,12 @@ sys.path.append(
     )
 )
 
-from utils.report_manager import (
-    get_report_folder
+from adhoc_analysis import (
+    window_analysis
 )
 
-from adhoc_analysis import (
-    balanced_hour17_deep_analysis
+from utils.report_manager import (
+    get_report_folder
 )
 
 
@@ -810,7 +810,7 @@ def main():
 
     if RUN_ADHOC:
 
-        balanced_hour17_deep_analysis(
+       window_analysis(
             df,
             report_folder
         )
