@@ -17,6 +17,14 @@ from adhoc_analysis import (
     window_analysis
 )
 
+from tree_operational_analysis import (
+    run_operational_tree_analysis
+)
+
+from tree_pattern_analysis import (
+    run_tree_pattern_analysis
+)
+
 from utils.report_manager import (
     get_report_folder
 )
@@ -35,10 +43,11 @@ from phase2_analysis import (
 
 #DICE QUE ANALISIS VAN A CORRER
 
-RUN_PHASE1 = True
+RUN_PHASE1 = False
 RUN_PHASE2 = False 
-RUN_ADHOC = True
-
+RUN_ADHOC = False
+RUN_TREE_ANALYSIS = True
+RUN_OPERATIONAL_TREE = True
 
 def balanced_ema_analysis(
     df,
@@ -811,6 +820,20 @@ def main():
     if RUN_ADHOC:
 
        window_analysis(
+            df,
+            report_folder
+        )
+
+    if RUN_TREE_ANALYSIS:
+
+        run_tree_pattern_analysis(
+            df,
+            report_folder
+        )
+
+    if RUN_OPERATIONAL_TREE:
+
+        run_operational_tree_analysis(
             df,
             report_folder
         )
