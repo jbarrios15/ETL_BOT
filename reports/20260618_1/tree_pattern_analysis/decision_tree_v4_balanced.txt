@@ -1,0 +1,28 @@
+v4_ema20 | balanced_rebound
+================================================================================
+
+|--- volatility_pct <= 0.04
+|   |--- volatility_pct <= 0.04
+|   |   |--- atr <= 0.00
+|   |   |   |--- atr <= 0.00
+|   |   |   |   |--- class: 0
+|   |   |   |--- atr >  0.00
+|   |   |   |   |--- class: 0
+|   |   |--- atr >  0.00
+|   |   |   |--- class: 1
+|   |--- volatility_pct >  0.04
+|   |   |--- class: 0
+|--- volatility_pct >  0.04
+|   |--- volatility_pct <= 0.04
+|   |   |--- volatility_pct <= 0.04
+|   |   |   |--- class: 1
+|   |   |--- volatility_pct >  0.04
+|   |   |   |--- class: 1
+|   |--- volatility_pct >  0.04
+|   |   |--- volatility_pct <= 0.05
+|   |   |   |--- class: 0
+|   |   |--- volatility_pct >  0.05
+|   |   |   |--- trade_hour <= 14.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- trade_hour >  14.50
+|   |   |   |   |--- class: 1

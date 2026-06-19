@@ -21,6 +21,10 @@ from tree_operational_analysis import (
     run_operational_tree_analysis
 )
 
+from filtered_bot_simulation import (
+    run_filtered_bot_simulation
+)
+
 from tree_pattern_analysis import (
     run_tree_pattern_analysis
 )
@@ -48,6 +52,7 @@ RUN_PHASE2 = False
 RUN_ADHOC = False
 RUN_TREE_ANALYSIS = True
 RUN_OPERATIONAL_TREE = True
+RUN_FILTER_SIMULATION = True
 
 def balanced_ema_analysis(
     df,
@@ -834,6 +839,13 @@ def main():
     if RUN_OPERATIONAL_TREE:
 
         run_operational_tree_analysis(
+            df,
+            report_folder
+        )
+
+    if RUN_FILTER_SIMULATION:
+
+        run_filtered_bot_simulation(
             df,
             report_folder
         )

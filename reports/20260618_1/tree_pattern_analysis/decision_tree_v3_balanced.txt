@@ -1,0 +1,25 @@
+v3_cooldown | balanced_rebound
+================================================================================
+
+|--- duration_seconds <= 72.50
+|   |--- volatility_pct <= 0.04
+|   |   |--- rsi <= 48.24
+|   |   |   |--- rsi <= 28.89
+|   |   |   |   |--- class: 0
+|   |   |   |--- rsi >  28.89
+|   |   |   |   |--- class: 1
+|   |   |--- rsi >  48.24
+|   |   |   |--- class: 0
+|   |--- volatility_pct >  0.04
+|   |   |--- volatility_pct <= 0.04
+|   |   |   |--- class: 1
+|   |   |--- volatility_pct >  0.04
+|   |   |   |--- rsi <= 44.06
+|   |   |   |   |--- class: 0
+|   |   |   |--- rsi >  44.06
+|   |   |   |   |--- class: 1
+|--- duration_seconds >  72.50
+|   |--- volatility_pct <= 0.04
+|   |   |--- class: 0
+|   |--- volatility_pct >  0.04
+|   |   |--- class: 1

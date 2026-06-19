@@ -1,0 +1,25 @@
+v4_ema20 | extreme_reversion
+================================================================================
+
+|--- rsi <= 81.71
+|   |--- atr <= 0.00
+|   |   |--- volatility_pct <= 0.04
+|   |   |   |--- duration_seconds <= 55.50
+|   |   |   |   |--- class: 1
+|   |   |   |--- duration_seconds >  55.50
+|   |   |   |   |--- class: 0
+|   |   |--- volatility_pct >  0.04
+|   |   |   |--- volatility_pct <= 0.04
+|   |   |   |   |--- class: 1
+|   |   |   |--- volatility_pct >  0.04
+|   |   |   |   |--- class: 1
+|   |--- atr >  0.00
+|   |   |--- atr <= 0.00
+|   |   |   |--- class: 0
+|   |   |--- atr >  0.00
+|   |   |   |--- volatility_pct <= 0.05
+|   |   |   |   |--- class: 1
+|   |   |   |--- volatility_pct >  0.05
+|   |   |   |   |--- class: 0
+|--- rsi >  81.71
+|   |--- class: 1

@@ -1,0 +1,28 @@
+OPERATIONAL GLOBAL
+================================================================================
+
+|--- trade_hour_14 <= 0.50
+|   |--- trade_hour_9 <= 0.50
+|   |   |--- volatility_bucket_Baja <= 0.50
+|   |   |   |--- trade_hour_6 <= 0.50
+|   |   |   |   |--- trade_hour_20 <= 0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- trade_hour_20 >  0.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |--- trade_hour_6 >  0.50
+|   |   |   |   |--- class: 0
+|   |   |--- volatility_bucket_Baja >  0.50
+|   |   |   |--- trade_hour_3 <= 0.50
+|   |   |   |   |--- setup_type_extreme_reversion <= 0.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |   |--- setup_type_extreme_reversion >  0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |--- trade_hour_3 >  0.50
+|   |   |   |   |--- class: 0
+|   |--- trade_hour_9 >  0.50
+|   |   |--- symbol_GBPUSD-OTC <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- symbol_GBPUSD-OTC >  0.50
+|   |   |   |--- class: 0
+|--- trade_hour_14 >  0.50
+|   |--- class: 0

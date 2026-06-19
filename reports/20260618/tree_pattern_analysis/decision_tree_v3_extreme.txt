@@ -1,0 +1,31 @@
+v3_cooldown | extreme_reversion
+================================================================================
+
+|--- rsi <= 77.74
+|   |--- volatility_pct <= 0.03
+|   |   |--- class: 1
+|   |--- volatility_pct >  0.03
+|   |   |--- rsi <= 25.24
+|   |   |   |--- atr <= 0.00
+|   |   |   |   |--- class: 0
+|   |   |   |--- atr >  0.00
+|   |   |   |   |--- class: 0
+|   |   |--- rsi >  25.24
+|   |   |   |--- ema_distance <= -0.18
+|   |   |   |   |--- class: 1
+|   |   |   |--- ema_distance >  -0.18
+|   |   |   |   |--- class: 0
+|--- rsi >  77.74
+|   |--- ema_distance <= 0.29
+|   |   |--- ema_distance <= 0.25
+|   |   |   |--- trade_hour <= 6.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- trade_hour >  6.50
+|   |   |   |   |--- class: 1
+|   |   |--- ema_distance >  0.25
+|   |   |   |--- class: 1
+|   |--- ema_distance >  0.29
+|   |   |--- rsi <= 81.00
+|   |   |   |--- class: 0
+|   |   |--- rsi >  81.00
+|   |   |   |--- class: 1

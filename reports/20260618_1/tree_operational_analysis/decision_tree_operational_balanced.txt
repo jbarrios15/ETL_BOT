@@ -1,0 +1,28 @@
+OPERATIONAL BALANCED
+================================================================================
+
+|--- volatility_bucket_Baja <= 0.50
+|   |--- direction_put <= 0.50
+|   |   |--- symbol_EURUSD-OTC <= 0.50
+|   |   |   |--- strategy_version_v3_cooldown <= 0.50
+|   |   |   |   |--- class: 1
+|   |   |   |--- strategy_version_v3_cooldown >  0.50
+|   |   |   |   |--- class: 1
+|   |   |--- symbol_EURUSD-OTC >  0.50
+|   |   |   |--- strategy_version_v4_ema20 <= 0.50
+|   |   |   |   |--- class: 1
+|   |   |   |--- strategy_version_v4_ema20 >  0.50
+|   |   |   |   |--- class: 1
+|   |--- direction_put >  0.50
+|   |   |--- symbol_EURUSD-OTC <= 0.50
+|   |   |   |--- class: 1
+|   |   |--- symbol_EURUSD-OTC >  0.50
+|   |   |   |--- class: 0
+|--- volatility_bucket_Baja >  0.50
+|   |--- direction_put <= 0.50
+|   |   |--- strategy_version_v4_ema20 <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- strategy_version_v4_ema20 >  0.50
+|   |   |   |--- class: 0
+|   |--- direction_put >  0.50
+|   |   |--- class: 0
